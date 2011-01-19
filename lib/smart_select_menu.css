@@ -1,0 +1,26 @@
+div.jq_smartSelectWrap {
+  border: 1px solid black;
+  width: 100px;
+}
+
+div.jq_smartSelectWrap div {
+  margin: 2px 4px;
+}
+
+ul.jq_smartSelectList {
+  border-top: 1px solid black;
+  padding: 0;
+  margin: 0;
+}
+ul.jq_smartSelectList li {
+  list-style-type: none;
+  padding: 2px 4px;
+}
+
+li.jq_smartSelectScrollUp {
+  border-bottom: 1px solid #aaa;
+}
+
+li.jq_smartSelectScrollDown {
+  border-top: 1px solid #aaa;
+}
