@@ -1,6 +1,69 @@
 var currentSmartSelectMenu;
 
 function smartSelectMenu(clicked_div, options) {
+  
+  $('li.jq_smartSelect').live('click', function(){
+    var self = $(this);
+    var div = self.parents('div.jq_smartSelectWrap').find('div')
+
+    div.replaceWith(buildSelectedDiv(self.data('value'), self.html()))
+    setHiddenInputData(self);
+    currentSmartSelectMenu.close();
+  });
+  
+  $('li.jq_smartSelectScroll').live('mouseenter', function(){
+    var self = $(this);
+
+    if(self.hasClass('jq_smartSelectScrollDown')){
+      currentSmartSelectMenu.startScrollDown();
+    } else if(self.hasClass('jq_smartSelectScrollUp')){
+      currentSmartSelectMenu.startScrollUp();
+    }
+  });
+
+  $('li.jq_smartSelectScroll').live('mouseleave', function(){
+    var self = $(this);
+
+    if(self.hasClass('jq_smartSelectScrollDown')){
+      currentSmartSelectMenu.stopScrollDown();
+    } else if(self.hasClass('jq_smartSelectScrollUp')){
+      currentSmartSelectMenu.stopScrollUp();
+    }
+  });
+  
+  $('ul.jq_smartSelectList').live('mousewheel', function(event, delta) {
+    event.preventDefault();
+    if(delta > 0){
+      currentSmartSelectMenu.scrollUp();
+    } else if(delta < 0) {
+      currentSmartSelectMenu.scrollDown();
+    }
+  });
+  
+  // Removing click scrolling functionality 
+  // 
+  // $('li.jq_smartSelectScroll').live('click', function(){
+  //   var self = $(this);
+  // 
+  //   if(self.hasClass('jq_smartSelectScrollDown')){
+  //     currentSmartSelectMenu.scrollDown();
+  //   } else if(self.hasClass('jq_smartSelectScrollUp')){
+  //     currentSmartSelectMenu.scrollUp();
+  //   }
+  // });
+
+
+  var clearCurrentTransactionMenu = function(){
+    if(currentSmartSelectMenu){
+      currentSmartSelectMenu.close();   
+      currentSmartSelectMenu = null;     
+    }
+  };
+  
+  $('div.jq_smartSelectWrap').live('mouseleave', function(event){
+      clearCurrentTransactionMenu();     
+  });
+  
   var scrollTime = 200;
   
   var menu = function(){
@@ -360,56 +423,6 @@ $(document).ready(function() {
     self.replaceWith(buildSelectListFromSelectTag(self));
   });
   
-  $('li.jq_smartSelect').live('click', function(){
-    var self = $(this);
-    var div = self.parents('div.jq_smartSelectWrap').find('div')
-
-    div.replaceWith(buildSelectedDiv(self.data('value'), self.html()))
-    setHiddenInputData(self);
-    currentSmartSelectMenu.close();
-  });
-  
-  $('li.jq_smartSelectScroll').live('mouseenter', function(){
-    var self = $(this);
-
-    if(self.hasClass('jq_smartSelectScrollDown')){
-      currentSmartSelectMenu.startScrollDown();
-    } else if(self.hasClass('jq_smartSelectScrollUp')){
-      currentSmartSelectMenu.startScrollUp();
-    }
-  });
-
-  $('li.jq_smartSelectScroll').live('mouseleave', function(){
-    var self = $(this);
-
-    if(self.hasClass('jq_smartSelectScrollDown')){
-      currentSmartSelectMenu.stopScrollDown();
-    } else if(self.hasClass('jq_smartSelectScrollUp')){
-      currentSmartSelectMenu.stopScrollUp();
-    }
-  });
-  
-  $('ul.jq_smartSelectList').live('mousewheel', function(event, delta) {
-    event.preventDefault();
-    if(delta > 0){
-      currentSmartSelectMenu.scrollUp();
-    } else if(delta < 0) {
-      currentSmartSelectMenu.scrollDown();
-    }
-  });
-  
-  // Removing click scrolling functionality 
-  // 
-  // $('li.jq_smartSelectScroll').live('click', function(){
-  //   var self = $(this);
-  // 
-  //   if(self.hasClass('jq_smartSelectScrollDown')){
-  //     currentSmartSelectMenu.scrollDown();
-  //   } else if(self.hasClass('jq_smartSelectScrollUp')){
-  //     currentSmartSelectMenu.scrollUp();
-  //   }
-  // });
-
   $('div.jq_smartSelectWrap').live('click', function() {
 		// Show/hide transaction menus
 
@@ -422,16 +435,5 @@ $(document).ready(function() {
     }
 
     return false;
-  });
-  
-  var clearCurrentTransactionMenu = function(){
-    if(currentSmartSelectMenu){
-      currentSmartSelectMenu.close();   
-      currentSmartSelectMenu = null;     
-    }
-  };
-  
-  $('div.jq_smartSelectWrap').live('mouseleave', function(event){
-      clearCurrentTransactionMenu();     
   });
 });
