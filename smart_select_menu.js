@@ -344,7 +344,17 @@ var setHiddenInputData = function(clicked_item){
 }
 
 $(document).ready(function() {
+  // $('select.jq_smartSelect').jq_smartSelect({
+  //   option: option_value,
+  //   roption: raoption_value
+  // })
+  
   $('select').each(function(){
+    // called on one element
+    // $(this).jq_smartSelect({
+    //   option_1: option_1_value,
+    //   option_2: option_2_value
+    // })
     var self = $(this);
 
     self.replaceWith(buildSelectListFromSelectTag(self));
@@ -379,7 +389,7 @@ $(document).ready(function() {
     }
   });
   
-  $('ul.jq_transMenu').live('mousewheel', function(event, delta) {
+  $('ul.jq_smartSelectList').live('mousewheel', function(event, delta) {
     event.preventDefault();
     if(delta > 0){
       currentSmartSelectMenu.scrollUp();
@@ -406,22 +416,14 @@ $(document).ready(function() {
 		if (!$(this).find('ul').is(':visible')) {
       currentSmartSelectMenu = new smartSelectMenu($(this));
       currentSmartSelectMenu.open();
+    } else {
+      currentSmartSelectMenu.close();
+      currentSmartSelectMenu = null;
     }
 
     return false;
   });
   
-  $('table#transactions tr div').live('click', function() {
-		// Show/hide transaction menus
-
-		if (!$(this).find('ul').is(':visible')) {
-      currentSmartSelectMenu = new smartSelectMenu($(this));
-      currentSmartSelectMenu.open();
-    }
-
-    return false;
-  });
-
   var clearCurrentTransactionMenu = function(){
     if(currentSmartSelectMenu){
       currentSmartSelectMenu.close();   
@@ -429,8 +431,7 @@ $(document).ready(function() {
     }
   };
   
-  $('table#transactions tr div').live('mouseleave', function(event){
+  $('div.jq_smartSelectWrap').live('mouseleave', function(event){
       clearCurrentTransactionMenu();     
   });
-
 });
