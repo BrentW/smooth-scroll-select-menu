@@ -26,84 +26,63 @@ $(document).ready(function() {
       };
 
       var buildSelectedDiv = function(value, html_data){
-        var html = "";
-        html += "<div data-value='";
-        html += value;
-        html += "'>";
-        html += html_data;
-        html += "</div>";  
-        return html;  
+        var div = $('<div />');
+        div.attr('data-value', value);
+        div.html(html_data);
+        return div;
       };
 
       var buildSelectedDivFromSelect = function(selected){
         return buildSelectedDiv(selected.val(), selected.html());
       };
-
+      
       var buildListItem = function(value, html_data){
-        var html = "";
-        html += "<li class='jq_smartSelect' data-value='";
-        html += value; 
-        html += "'>"
-        html += html_data;
-        html += "</li>";
-        return html;  
-      };
-
+        var li = $('<li class="jq_smartSelect" />');
+        li.attr('data-value', value);
+        li.html(html_data);
+        return li;
+      }
+      
       var buildListItems = function(items){
-        var html = "";
-        html += "<ul class='jq_smartSelectList' style='position:relative; display:none;'>";
-        html += "<li class='jq_smartSelectScrollUp jq_smartSelectScroll off' style='display: none;'>scroll up</li>";
-        items.each(function(option){
-          html += buildListItem($(items[option]).val(), $(items[option]).html());
+        var ul = $("<ul class='jq_smartSelectList' style='position:relative; display:none;' />");
+        ul.append("<li class='jq_smartSelectScrollUp jq_smartSelectScroll off' style='display: none;'>scroll up</li>");
+        items.each(function(index, item){
+          ul.append(buildListItem($(item).val(), $(item).html()));
         })
-        html += "<li class='jq_smartSelectScrollDown jq_smartSelectScroll on' style='display: none;'>scroll down</li>";
-        html += "</ul>";
-        return html;
+        ul.append("<li class='jq_smartSelectScrollDown jq_smartSelectScroll on' style='display: none;'>scroll down</li>");
+        return ul;
       };
 
-      var openingDivList = function(classes, id, name, value){
-        var html = "<div class='jq_smartSelectWrap"
-        html += " " + classes + "'";
-        html += " id='";
-        html += id;
-        html += "'"
-        html += " data-name='";
-        html += name;
-        html += "'";
-        html += " data-selected='";
-        html += value;
-        html += "'";
-        html += "'";
-        html += ">";
-        return html;  
-      };
 
       var buildHiddenInput = function(name, value){
-        var html = "";
-        html += "<input type='hidden' name='";
-        html += name;
-        html += "' value='";
-        html += value;
-        html += "'>";
-        return html;
+        var input = $("<input type='hidden' />");
+        input.attr('name', name);
+        input.val(value);
+        return input;
       };
 
+      var buildSelectWrap = function(classes, id, name, selected_value){
+         var div = $("<div class='jq_smartSelectWrap' />");
+         div.addClass(classes);
+         div.attr('id', id);
+         div.attr('data-name', name);
+         div.attr('data-selected', selected_value);
+         return div;        
+      };
 
       var buildSelectListFromSelectTag = function(){
-        var selected = selectTag.find('option:selected');
-        var items = selectTag.find('option');
-        var classes = selectTag.attr('class')
-        var id = selectTag.attr('id');
-        var name = selectTag.attr('name').replace('jq_smartSelect', '');
+        var selected  = selectTag.find('option:selected');
+        var items     = selectTag.find('option');
+        var classes   = selectTag.attr('class')
+        var id        = selectTag.attr('id');
+        var name      = selectTag.attr('name').replace('jq_smartSelect', '');         
+        var div       = buildSelectWrap(classes, id, name, selected.val());
+        
+        div.append(buildSelectedDivFromSelect(selected));
+        div.append(buildListItems(items));
+        div.append(buildHiddenInput(name, selected.val()));
 
-        var html = openingDivList(classes, id, name, selected.val());
-
-        html += buildSelectedDivFromSelect(selected);
-        html += buildListItems(items);
-        html += buildHiddenInput(name, selected.val());
-
-        html += "</div>";  
-        return html;
+        return div;
       };
       
       
@@ -351,7 +330,7 @@ $(document).ready(function() {
 
       var setHiddenInputData = function(clicked_item){
         var hidden  = selectWrap.find('input[type="hidden"]');
-      
+
         selectWrap.data('selected', clicked_item.data('value'));
         hidden.attr('value', clicked_item.data('value'));
       };
