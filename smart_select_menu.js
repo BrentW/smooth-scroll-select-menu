@@ -3,8 +3,13 @@
 $(document).ready(function() {
   (function( $ ){
     function smartSelectMenu(selectTag, options) {
-      this.options = options || new Object();      
-      var scrollTime = options.scrollTime || 200;
+      this.options      = options || new Object();      
+      var scrollTime    = options.scrollTime || 200;
+      var scrollEvent   = options.scrollEvent || 'hover';
+
+      var hoverToScroll = scrollEvent == 'hover';
+      var clickToScroll = !hoverToScroll;
+      
       var currentPosition  = 0;
   
       var scrollUpInterval,
@@ -343,6 +348,8 @@ $(document).ready(function() {
           div.replaceWith(buildSelectedDiv(self.data('value'), self.html()))
           setHiddenInputData(self);
           close();
+          
+          options.afterSelect(self); //run afterSelect
         });
       };
 
@@ -385,10 +392,31 @@ $(document).ready(function() {
           }
         });        
       };
+
+      var bindHoverToScrollEvents = function(){
+        if(hoverToScroll){
+          bindScrollStartEvents();
+          bindScrollStopEvents();
+        }        
+      };
+      
+      var bindClickToScrollEvents = function(){
+        if(clickToScroll){
+          selectWrap.find('li.jq_smartSelectScroll').click(function(){
+            var self = $(this);
+        
+            if(self.hasClass('jq_smartSelectScrollDown')){
+              scrollDown();
+            } else if(self.hasClass('jq_smartSelectScrollUp')){
+              scrollUp();
+            }
+          });
+        }
+      };
       
       var bindScrollEvents = function(){
-        bindScrollStartEvents();
-        bindScrollStopEvents();
+        bindHoverToScrollEvents();
+        bindClickToScrollEvents();
         bindMouseWheel();
       };
 

@@ -13,7 +13,7 @@
   <script type="text/javascript">
 		$(document).ready(function() {
 			//BEGIN DEMO CODE TO ALLOW URL PARAMS WITH ONLY JS
-			//IE: DON'T USE IN YOUR OWN CODE
+			//IE: YOU DON'T NEED TO ADD THIS PART
 				function getParams() {
 				  var idx = document.URL.indexOf('?');
 				  var params = new Array();
@@ -46,9 +46,10 @@
 			
 			
 			$('select.jq_smartSelect').jq_smartSelect({
-				scrollEvent : 'click',
+				scrollEvent: 'click',
+				scrollTime: 80,
 				afterSelect : function(clicked_li){
-					alert('clicked' + clicked_li);
+					alert('You selected ' + clicked_li.html() + '!');
 				}
 			});
 		});
