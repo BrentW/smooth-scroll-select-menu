@@ -142,21 +142,11 @@ $(document).ready(function() {
       };
 
       var menuIsTooLargeForWindow = function(menuHeight, windowHeight){
-        if(menuHeight > windowHeight) {
-          return true;
-        }
-        else {
-          return false;
-        }
+        return menuHeight > windowHeight
       };
       
       var menuOverFlowsWindow = function(menuTop, menuHeight, windowHeight){
-        if(menuTop + menuHeight > windowHeight + windowOffset()) {
-          return true;
-        }
-        else {
-          return false;
-        }
+        return menuTop + menuHeight > windowHeight + windowOffset();
       };
 
       var liHeight = function() {
