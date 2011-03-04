@@ -1,89 +1,117 @@
-var currentSmartSelectMenu;
+// //      uses kswedberg's jquery-smooth-scroll for scrollable method
 
 $(document).ready(function() {
   (function( $ ){
-    function smartSelectMenu(clicked_div, scrollEvent) {
-      var clickScroll = function(scrollEvent){
-        if(scrollEvent == 'click'){
-          return true;
-        } else {
-          return false;
-        }
-      }
+    function smartSelectMenu(selectTag, options) {
+      this.options = options || new Object();      
+      var scrollTime = options.scrollTime || 200;
+      var currentPosition  = 0;
+  
+      var scrollUpInterval,
+          scrollDownInterval,
+          selectWrap,
+          liCount,
+          lastPosition;
       
-      $('div.jq_smartSelectWrap div').live('click', function(){
-        if ($(this).parent().find('ul').is(':visible')) {
-          currentSmartSelectMenu.close();
-        }
-      })
-
-      $('li.jq_smartSelect').live('click', function(){
-        var self = $(this);
-        var div = self.parents('div.jq_smartSelectWrap').find('div')
-
-        div.replaceWith(buildSelectedDiv(self.data('value'), self.html()))
-        setHiddenInputData(self);
-        currentSmartSelectMenu.close();
-      });
-
-      $('li.jq_smartSelectScroll').live('mouseenter', function(){
-        var self = $(this);
-
-        if(self.hasClass('jq_smartSelectScrollDown')){
-          currentSmartSelectMenu.startScrollDown();
-        } else if(self.hasClass('jq_smartSelectScrollUp')){
-          currentSmartSelectMenu.startScrollUp();
-        }
-      });
-
-      $('li.jq_smartSelectScroll').live('mouseleave', function(){
-        var self = $(this);
-
-        if(self.hasClass('jq_smartSelectScrollDown')){
-          currentSmartSelectMenu.stopScrollDown();
-        } else if(self.hasClass('jq_smartSelectScrollUp')){
-          currentSmartSelectMenu.stopScrollUp();
-        }
-      });
-
-      $('ul.jq_smartSelectList').live('mousewheel', function(event, delta) {
-        event.preventDefault();
-        if(delta > 0){
-          currentSmartSelectMenu.scrollUp();
-        } else if(delta < 0) {
-          currentSmartSelectMenu.scrollDown();
-        }
-      });
-
-      // Removing click scrolling functionality 
-      // 
-      // $('li.jq_smartSelectScroll').live('click', function(){
-      //   var self = $(this);
-      // 
-      //   if(self.hasClass('jq_smartSelectScrollDown')){
-      //     currentSmartSelectMenu.scrollDown();
-      //   } else if(self.hasClass('jq_smartSelectScrollUp')){
-      //     currentSmartSelectMenu.scrollUp();
-      //   }
-      // });
-
-
-      var clearCurrentTransactionMenu = function(){
-        if(currentSmartSelectMenu){
-          currentSmartSelectMenu.close();   
-          currentSmartSelectMenu = null;     
-        }
+      var menu = function(){
+        return selectWrap.find('ul');
       };
 
-      $('div.jq_smartSelectWrap').live('mouseleave', function(event){
-          clearCurrentTransactionMenu();     
-      });
+      var isOpen = function(){
+        return selectWrap.find('ul').is(':visible');
+      };
+      
+      var isClosed = function(){
+        return !isOpen();
+      };
 
-      var scrollTime = 200;
+      var buildSelectedDiv = function(value, html_data){
+        var html = "";
+        html += "<div data-value='";
+        html += value;
+        html += "'>";
+        html += html_data;
+        html += "</div>";  
+        return html;  
+      };
 
-      var menu = function(){
-        return $(clicked_div).find('ul');
-      };  
+      var buildSelectedDivFromSelect = function(selected){
+        return buildSelectedDiv(selected.val(), selected.html());
+      };
+
+      var buildListItem = function(value, html_data){
+        var html = "";
+        html += "<li class='jq_smartSelect' data-value='";
+        html += value; 
+        html += "'>"
+        html += html_data;
+        html += "</li>";
+        return html;  
+      };
+
+      var buildListItems = function(items){
+        var html = "";
+        html += "<ul class='jq_smartSelectList' style='position:relative; display:none;'>";
+        html += "<li class='jq_smartSelectScrollUp jq_smartSelectScroll off' style='display: none;'>scroll up</li>";
+        items.each(function(option){
+          html += buildListItem($(items[option]).val(), $(items[option]).html());
+        })
+        html += "<li class='jq_smartSelectScrollDown jq_smartSelectScroll on' style='display: none;'>scroll down</li>";
+        html += "</ul>";
+        return html;
+      };
+
+      var openingDivList = function(classes, id, name, value){
+        var html = "<div class='jq_smartSelectWrap"
+        html += " " + classes + "'";
+        html += " id='";
+        html += id;
+        html += "'"
+        html += " data-name='";
+        html += name;
+        html += "'";
+        html += " data-selected='";
+        html += value;
+        html += "'";
+        html += "'";
+        html += ">";
+        return html;  
+      };
+
+      var buildHiddenInput = function(name, value){
+        var html = "";
+        html += "<input type='hidden' name='";
+        html += name;
+        html += "' value='";
+        html += value;
+        html += "'>";
+        return html;
+      };
+
+
+      var buildSelectListFromSelectTag = function(){
+        var selected = selectTag.find('option:selected');
+        var items = selectTag.find('option');
+        var classes = selectTag.attr('class')
+        var id = selectTag.attr('id');
+        var name = selectTag.attr('name').replace('jq_smartSelect', '');
+
+        var html = openingDivList(classes, id, name, selected.val());
+
+        html += buildSelectedDivFromSelect(selected);
+        html += buildListItems(items);
+        html += buildHiddenInput(name, selected.val());
+
+        html += "</div>";  
+        return html;
+      };
+      
+      
+      var replaceSelectWithNewMenu = function(){
+        selectWrap = $(buildSelectListFromSelectTag());
+        selectTag.replaceWith(selectWrap);
+      };
+      
       var menuHeight = function(){
         return menu().outerHeight();
       };
@@ -96,10 +124,6 @@ $(document).ready(function() {
       var windowOffset = function() {
         return $(window).scrollTop();
       };
-
-      var liCount = $(clicked_div).find('li').length;
-      var currentPosition  = 0;
-      var lastPosition;
 
       var getMenuOverflow = function(menu_top, menu_height, window_height) {
         var overflow = menu_top + menu_height - window_height;
@@ -122,7 +146,7 @@ $(document).ready(function() {
           return false;
         }
       };
-
+      
       var menuOverFlowsWindow = function(menuTop, menuHeight, windowHeight){
         if(menuTop + menuHeight > windowHeight + windowOffset()) {
           return true;
@@ -157,8 +181,8 @@ $(document).ready(function() {
       var displayScrollLIs = function() {
         menu().find('li.jq_smartSelectScroll').show();
         hideOverflowLis();
-      };
-
+      };      
+      
       var open = function(){
         menu().show(); 
 
@@ -166,8 +190,6 @@ $(document).ready(function() {
           displayScrollLIs();      
         }
         if(menuOverFlowsWindow(menuTop(), menuHeight(), windowHeight())) {
-    //      $(window).scrollTop(menuOverflow());
-    //      uses kswedberg's jquery-smooth-scroll
           $('html, body').scrollable().animate({scrollTop:menuOverflow()}, 1000);
         }
       };
@@ -283,6 +305,7 @@ $(document).ready(function() {
       };
 
       var scrollUp = function(){
+        console.log('scrollup:position' + currentPosition)
         if(currentPosition > 0){
           toggleLisForScroll('up');
           decrementPosition();
@@ -292,6 +315,8 @@ $(document).ready(function() {
       };
 
       var scrollDown = function(){
+        console.log('scrolldown:position' + currentPosition)
+
         if(currentPosition < liCount - lisThatCanFitOnPage() - 2){
           toggleLisForScroll('down');
 
@@ -300,11 +325,8 @@ $(document).ready(function() {
         }
       };
 
-      var scrollUpInterval;
-      var scrollDownInterval;
-
       var startScrollUp = function(){
-        scrollUpInterval = setInterval(currentSmartSelectMenu.scrollUp, scrollTime);
+        scrollUpInterval = setInterval(scrollUp, scrollTime);
       };
 
       var stopScrollUp = function(){
@@ -312,139 +334,114 @@ $(document).ready(function() {
       };
 
       var startScrollDown = function(){
-        scrollDownInterval = setInterval(currentSmartSelectMenu.scrollDown, scrollTime);
+        scrollDownInterval = setInterval(scrollDown, scrollTime);
       };
 
       var stopScrollDown = function(){
         clearInterval(scrollDownInterval);
       };
 
-      return {
-        open            : open,
-        close           : close,
-        scrollUp        : scrollUp,
-        scrollDown      : scrollDown,
-        startScrollUp   : startScrollUp,
-        stopScrollUp    : stopScrollUp,
-        startScrollDown : startScrollDown,
-        stopScrollDown  : stopScrollDown
+      var bindMenuOpenClicks = function(){
+        selectWrap.click(function() {
+          if (isClosed()) {
+             open();
+           } 
+        
+          return false;
+        });                
       };
-    }
 
-    var buildSelectedDiv = function(value, html_data){
-      var html = "";
-      html += "<div data-value='";
-      html += value;
-      html += "'>";
-      html += html_data;
-      html += "</div>";  
-      return html;  
-    }
-
-    var buildSelectedDivFromSelect = function(selected){
-      return buildSelectedDiv(selected.val(), selected.html());
-    }
-
-    var buildListItem = function(value, html_data){
-      var html = "";
-      html += "<li class='jq_smartSelect' data-value='";
-      html += value; 
-      html += "'>"
-      html += html_data;
-      html += "</li>";
-      return html;  
-    }
-
-    var buildListItems = function(items){
-      var html = "";
-      html += "<ul class='jq_smartSelectList' style='position:relative; display:none;'>";
-      html += "<li class='jq_smartSelectScrollUp jq_smartSelectScroll off' style='display: none;'>scroll up</li>";
-      items.each(function(option){
-        html += buildListItem($(items[option]).val(), $(items[option]).html());
-      })
-      html += "<li class='jq_smartSelectScrollDown jq_smartSelectScroll on' style='display: none;'>scroll down</li>";
-      html += "</ul>";
-      return html;
-    }
-
-    var openingDivList = function(classes, id, name, value){
-      var html = "<div class='jq_smartSelectWrap"
-      html += " " + classes + "'";
-      html += " id='";
-      html += id;
-      html += "'"
-      html += " data-name='";
-      html += name;
-      html += "'";
-      html += " data-selected='";
-      html += value;
-      html += "'";
-      html += "'";
-      html += ">";
-      return html;  
-    }
-
-    var buildHiddenInput = function(name, value){
-      var html = "";
-      html += "<input type='hidden' name='";
-      html += name;
-      html += "' value='";
-      html += value;
-      html += "'>";
-      return html;
-    }
-
-
-    var buildSelectListFromSelectTag = function(select){
-      var selected = select.find('option:selected');
-      var items = select.find('option');
-      var classes = select.attr('class')
-      var id = select.attr('id');
-      var name = select.attr('name').replace('jq_smartSelect', '');
-
-      var html = openingDivList(classes, id, name, selected.val());
-
-
-      html += buildSelectedDivFromSelect(selected);
-      html += buildListItems(items);
-      html += buildHiddenInput(name, selected.val());
-
-      html += "</div>";  
-      return html;
-    }
-
-    var setHiddenInputData = function(clicked_item){
-      var wrap    = clicked_item.parents('div.jq_smartSelectWrap')
-      var hidden  = wrap.find('input[type="hidden"]');
-
-      wrap.data('selected', clicked_item.data('value'));
-      hidden.attr('value', clicked_item.data('value'));
-    }
-
-    $.fn.jq_smartSelect = function(options) {
-      this.replaceWith(buildSelectListFromSelectTag(this));
-
-      $('div.jq_smartSelectWrap').live('click', function() {
-        if (!$(this).find('ul').is(':visible')) {
-          currentSmartSelectMenu = new smartSelectMenu($(this), options["scrollEvent"]);
-          currentSmartSelectMenu.open();
-        } 
+      var setHiddenInputData = function(clicked_item){
+        var hidden  = selectWrap.find('input[type="hidden"]');
       
-        return false;
-      });
+        selectWrap.data('selected', clicked_item.data('value'));
+        hidden.attr('value', clicked_item.data('value'));
+      };
 
+      var bindSelectionClicks = function(){
+        selectWrap.find('li.jq_smartSelect').click(function(){
+          var self = $(this);
+          var div = selectWrap.find('div');
+
+          div.replaceWith(buildSelectedDiv(self.data('value'), self.html()))
+          setHiddenInputData(self);
+          close();
+        });
+      };
+
+      var bindClicks = function(){
+        bindMenuOpenClicks();
+        bindSelectionClicks();
+      };
+      
+      var bindScrollStartEvents = function(){
+        selectWrap.find('li.jq_smartSelectScroll').mouseenter(function(){
+          var self = $(this);
+
+          if(self.hasClass('jq_smartSelectScrollDown')){
+            startScrollDown();
+          } else if(self.hasClass('jq_smartSelectScrollUp')){
+            startScrollUp();
+          }
+        });
+      };
+      
+      var bindScrollStopEvents = function(){
+        selectWrap.find('li.jq_smartSelectScroll').mouseleave(function(){
+          var self = $(this);
+
+          if(self.hasClass('jq_smartSelectScrollDown')){
+            stopScrollDown();
+          } else if(self.hasClass('jq_smartSelectScrollUp')){
+            stopScrollUp();
+          }
+        });
+      };
+      
+      var bindMouseWheel = function(){
+        selectWrap.find('ul.jq_smartSelectList').live('mousewheel', function(event, delta) {
+          event.preventDefault();
+          if(delta > 0){
+            scrollUp();
+          } else if(delta < 0) {
+            scrollDown();
+          }
+        });        
+      };
+      
+      var bindScrollEvents = function(){
+        bindScrollStartEvents();
+        bindScrollStopEvents();
+        bindMouseWheel();
+      };
+
+      var bindCloseEvents = function(){
+        selectWrap.mouseleave(function(event){
+          if(isOpen()){
+            close();
+          }
+        });
+      };
+
+      var bindEvents = function(){
+        bindClicks();             
+        bindScrollEvents();
+        bindCloseEvents();
+      };
+
+      var initialize = function(){
+        replaceSelectWithNewMenu();
+        liCount = menu().find('li').length;
+        bindEvents();
+      };
+      
+      initialize();
+    }
+    
+    $.fn.jq_smartSelect = function(options) {
+      $(this).each(function(index, selectTag){        
+        new smartSelectMenu($(selectTag), options);
+      });
     };
   })( jQuery );
 });
-
-// called on one element
-// $(this).jq_smartSelect({
-//   option_1: option_1_value,
-//   option_2: option_2_value
-// })
-
-// multiple elements
-// $('select.jq_smartSelect').jq_smartSelect({
-//   option: option_value,
-//   roption: raoption_value
-// })
