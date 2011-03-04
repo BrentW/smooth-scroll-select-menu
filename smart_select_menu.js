@@ -147,10 +147,38 @@ $(document).ready(function() {
         }
       };
 
+      var topPositionCanBeTheCurrentOne = function(lis){
+        //checks if current position plus listhatcanfitonpage is less than total lis        
+        return currentPosition + lisThatCanFitOnPage() <= lis.length;
+      };
+
+      var hideOverflowElementAndOnesBeforeCurrent = function(index, element){
+        if(index < currentPosition) {
+          $(element).hide();
+        } else if(index + 1 > lisThatCanFitOnPage() + currentPosition){
+          $(element).hide();
+        }
+      };
+
+      var setNewCurrentPositionAndHideElementsBefore = function(lis, index, element) {
+        currentPosition = lis.length - lisThatCanFitOnPage();
+        if(index + 1 < currentPosition) {
+          $(element).hide();
+        }                    
+      };
+
       var hideOverflowLis = function(){
-        menu().find('li.jq_smartSelect').each(function(index, element){
-          if(index + 1 > lisThatCanFitOnPage()){
-            $(element).hide();
+        //takes into account current position and size of new menu after window is resized bigger
+        //checks to see if current position plus listhatcanfitonpage is less than total lis
+        //if it is the first shown li is lastposition - listhatcanfitonpage
+        //else it is currentposition
+      
+        var lis = menu().find('li.jq_smartSelect');
+        lis.each(function(index, element){
+          if(topPositionCanBeTheCurrentOne(lis)){
+            hideOverflowElementAndOnesBeforeCurrent(index, element);
+          } else {
+            setNewCurrentPositionAndHideElementsBefore(lis, index, element);
           }
         });
       };
@@ -160,9 +188,15 @@ $(document).ready(function() {
         hideOverflowLis();
       };      
       
+      var resetLiVisibility = function(){
+        menu().find('li').show();
+        menu().find('.jq_smartSelectScroll').hide();
+      };
+      
       var open = function(){
         menu().show(); 
-
+        resetLiVisibility();
+        //setScrollPosition()
         if(menuIsTooLargeForWindow(menuHeight(), windowHeight())){
           displayScrollLIs();      
         }
