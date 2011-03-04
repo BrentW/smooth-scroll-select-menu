@@ -115,12 +115,15 @@ $(document).ready(function() {
       var menuHeight = function(){
         return menu().outerHeight();
       };
-      var menuTop    = function(){
+      
+      var menuTop = function(){
         return menu().offset().top;    
       };
-      var windowHeight  = function(){
+      
+      var windowHeight= function(){
         return $(window).height();
       };
+      
       var windowOffset = function() {
         return $(window).scrollTop();
       };
@@ -304,8 +307,12 @@ $(document).ready(function() {
         currentPosition = currentPosition - 1;
       };
 
+      var canScrollUp = function(){
+        return currentPosition > 0;
+      };
+
       var scrollUp = function(){
-        if(currentPosition > 0){
+        if(canScrollUp()){
           toggleLisForScroll('up');
           decrementPosition();
 
@@ -313,8 +320,12 @@ $(document).ready(function() {
         }
       };
 
+      var canScrollDown = function(){
+        return currentPosition < liCount - lisThatCanFitOnPage() - 2;
+      };
+
       var scrollDown = function(){
-        if(currentPosition < liCount - lisThatCanFitOnPage() - 2){
+        if(canScrollDown()){
           toggleLisForScroll('down');
 
           incrementPosition();
