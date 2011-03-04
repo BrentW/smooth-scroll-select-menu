@@ -305,7 +305,6 @@ $(document).ready(function() {
       };
 
       var scrollUp = function(){
-        console.log('scrollup:position' + currentPosition)
         if(currentPosition > 0){
           toggleLisForScroll('up');
           decrementPosition();
@@ -315,8 +314,6 @@ $(document).ready(function() {
       };
 
       var scrollDown = function(){
-        console.log('scrolldown:position' + currentPosition)
-
         if(currentPosition < liCount - lisThatCanFitOnPage() - 2){
           toggleLisForScroll('down');
 
