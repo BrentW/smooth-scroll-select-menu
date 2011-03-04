@@ -104,7 +104,7 @@ $(document).ready(function() {
         return menu().offset().top;    
       };
       
-      var windowHeight= function(){
+      var windowHeight = function(){
         return $(window).height();
       };
       

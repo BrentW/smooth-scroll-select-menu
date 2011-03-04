@@ -6,6 +6,9 @@ div.jq_smartSelectWrap {
 
 div.jq_smartSelectWrap div {
   margin: 2px 4px;
+  background-image: url('dropdown_arrow.gif');
+  background-repeat: no-repeat;
+  background-position: right;
 }
 
 ul.jq_smartSelectList {
