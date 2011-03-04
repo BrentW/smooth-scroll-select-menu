@@ -1,0 +1,30 @@
+div.jq_smoothScrollSelectWrap {
+  border: 1px solid black;
+  width: 100px;
+  float: left;
+}
+
+div.jq_smoothScrollSelectWrap div {
+  margin: 2px 4px;
+  background-image: url('dropdown_arrow.gif');
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+ul.jq_smoothScrollSelectList {
+  border-top: 1px solid black;
+  padding: 0;
+  margin: 0;
+}
+ul.jq_smoothScrollSelectList li {
+  list-style-type: none;
+  padding: 2px 4px;
+}
+
+li.jq_smoothScrollSelectScrollUp {
+  border-bottom: 1px solid #aaa;
+}
+
+li.jq_smoothScrollSelectScrollDown {
+  border-top: 1px solid #aaa;
+}
