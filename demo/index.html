@@ -7,8 +7,8 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
   <script src="../lib/jquery.mousewheel-3.0.2.pack.js" type="text/javascript"></script>
   <script src="../lib/jquery.smooth-scroll.min.js" type="text/javascript"></script>
-  <script src="../smart_select_menu.js" type="text/javascript"></script>
-	<link rel="stylesheet" type="text/css" href="../lib/smart_select_menu.css" />
+  <script src="../jquery.smooth-scroll-select-menu.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="../lib/smooth-scroll-select-menu.css" />
 	
   <script type="text/javascript">
 		$(document).ready(function() {
@@ -44,11 +44,14 @@
 				}								
 			//END DEMO CODE TO ALLOW URL PARAMS WITH ONLY JS
 			
-			$('select.jq_smartSelect').jq_smartSelect({
+			$('select.jq_smoothScrollSelect').jq_smoothScrollSelect({
 				scrollEvent: 'hover',
 				scrollTime: 200,
-				afterSelect : function(clicked_li){
+				afterSelect: function(clicked_li){
 					alert('You selected ' + clicked_li.html() + '!');
+				},
+				afterOpen: function(){
+					//alert('Open!');
 				}
 			});
 		});
@@ -65,7 +68,7 @@
 				Curabitur fringilla metus vel massa commodo ac ornare tellus aliquet. Suspendisse eget ante felis. Nunc at risus massa, eu volutpat mauris. Integer neque eros, luctus in convallis ac, mattis vitae sapien. Nam ut volutpat dolor. Sed feugiat cursus dolor sit amet elementum. Vivamus eu mi ligula, in accumsan mauris. Fusce in velit blandit velit posuere consectetur. Proin vulputate sodales lectus sit amet scelerisque. Quisque sit amet bibendum libero. Cras tincidunt lacinia ante, sit amet iaculis libero elementum a. In quis justo purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec risus sem, congue et eleifend eget, convallis gravida erat. Nulla facilisi. Etiam at nibh id ipsum dignissim lacinia eu sed lacus.
 			</p>
 		
-			<select name="car_make" class="jq_smartSelect" id="car_select">
+			<select name="car_make" class="jq_smoothScrollSelect" id="car_select">
 			  <option value="acura">Acura</option>
 			  <option value="alfaromeo">Alfa Romeo</option>
 			  <option value="audi">Audi</option>
@@ -113,7 +116,7 @@
 			  <option value="yamaha">Yamaha</option>
 			</select>
 
-			<select name="car_make2" class="jq_smartSelect" id="car_select2">
+			<select name="car_make2" class="jq_smoothScrollSelect" id="car_select2">
 			  <option value="acura">Acura</option>
 			  <option value="alfaromeo">Alfa Romeo</option>
 			  <option value="audi">Audi</option>
