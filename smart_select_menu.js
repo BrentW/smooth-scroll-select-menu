@@ -383,7 +383,7 @@ $(document).ready(function() {
       };
       
       var bindMouseWheel = function(){
-        selectWrap.find('ul.jq_smartSelectList').live('mousewheel', function(event, delta) {
+        selectWrap.find('ul.jq_smartSelectList').mousewheel(function(event, delta) {
           event.preventDefault();
           if(delta > 0){
             scrollUp();
