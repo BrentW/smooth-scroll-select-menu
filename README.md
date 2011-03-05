@@ -12,6 +12,7 @@ Features
 * Includes click to scroll and hover to scroll behaviors. Hover is the default.
 * Allows hover to scroll time to be adjusted.
 * Supports after select and after open callbacks.
+* Select classes and Id are transferred to new div wrapper.
 * Degrades gracefully when javascript is disabled.
 
 Usage
