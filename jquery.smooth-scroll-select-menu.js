@@ -47,7 +47,7 @@ $(document).ready(function() {
       };
       
       var buildListItems = function(items){
-        var ul = $("<ul class='jq_smoothScrollSelectList' style='position:relative; display:none;' />");
+        var ul = $("<ul class='jq_smoothScrollSelectList' style='display:none;' />");
         ul.append("<li class='jq_smoothScrollSelectScrollUp jq_smoothScrollSelectScroll off' style='display: none;'>scroll up</li>");
 
         items.each(function(index, item){

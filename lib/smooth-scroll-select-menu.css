@@ -1,7 +1,6 @@
 div.jq_smoothScrollSelectWrap {
   border: 1px solid black;
   width: 100px;
-  float: left;
 }
 
 div.jq_smoothScrollSelectWrap div {
@@ -15,10 +14,18 @@ ul.jq_smoothScrollSelectList {
   border-top: 1px solid black;
   padding: 0;
   margin: 0;
+  position:absolute;
+  background-color: white;
 }
 ul.jq_smoothScrollSelectList li {
   list-style-type: none;
   padding: 2px 4px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  position: relative;
+  left: -1px;
+  margin-right: -1px;
+  width: 92px;
 }
 
 li.jq_smoothScrollSelectScrollUp {
