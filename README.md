@@ -34,6 +34,14 @@ Click to scroll example:
 			scrollEvent: 'click'
 		});
 
+
+Requirements
+-------
+
+	* [jQuery 1.4](http://docs.jquery.com/Downloading_jQuery)
+	* [Karl Swedberg jquery-smooth-scroll](https://github.com/graphis/jquery-smooth-scroll)
+	* [jquery-mousewheel](http://plugins.jquery.com/project/mousewheel)(optional)
+
 Special Thanks
 -------
 
