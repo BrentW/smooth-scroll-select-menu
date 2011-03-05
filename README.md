@@ -24,7 +24,7 @@ Hover to scroll example:
 			afterSelect: function(clicked_li){
 				alert('You selected ' + clicked_li.html() + '!');
 			},
-			afterOpen: function(){
+			afterOpen: function(selectWrap){
 				//alert('Open!');
 			}
 		});
