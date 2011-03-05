@@ -1,13 +1,11 @@
-// //      uses kswedberg's jquery-smooth-scroll for scrollable method
-
 $(document).ready(function() {
   (function( $ ){
     function smoothScrollSelectMenu(selectTag, options) {
-      this.options      = options || new Object();      
+      this.options      = options || {};      
       var scrollTime    = options.scrollTime || 200;
       var scrollEvent   = options.scrollEvent || 'hover';
 
-      var hoverToScroll = scrollEvent == 'hover';
+      var hoverToScroll = scrollEvent === 'hover';
       var clickToScroll = !hoverToScroll;
       
       var currentPosition  = 0;
@@ -46,14 +44,16 @@ $(document).ready(function() {
         li.attr('data-value', value);
         li.html(html_data);
         return li;
-      }
+      };
       
       var buildListItems = function(items){
         var ul = $("<ul class='jq_smoothScrollSelectList' style='position:relative; display:none;' />");
         ul.append("<li class='jq_smoothScrollSelectScrollUp jq_smoothScrollSelectScroll off' style='display: none;'>scroll up</li>");
+
         items.each(function(index, item){
           ul.append(buildListItem($(item).val(), $(item).html()));
-        })
+        });
+        
         ul.append("<li class='jq_smoothScrollSelectScrollDown jq_smoothScrollSelectScroll on' style='display: none;'>scroll down</li>");
         return ul;
       };
@@ -78,7 +78,7 @@ $(document).ready(function() {
       var buildSelectListFromSelectTag = function(){
         var selected  = selectTag.find('option:selected');
         var items     = selectTag.find('option');
-        var classes   = selectTag.attr('class')
+        var classes   = selectTag.attr('class');
         var id        = selectTag.attr('id');
         var name      = selectTag.attr('name').replace('jq_smoothScrollSelect', '');         
         var div       = buildSelectWrap(classes, id, name, selected.val());
@@ -126,7 +126,7 @@ $(document).ready(function() {
       };
 
       var menuIsTooLargeForWindow = function(menuHeight, windowHeight){
-        return menuHeight > windowHeight
+        return menuHeight > windowHeight;
       };
       
       var menuOverFlowsWindow = function(menuTop, menuHeight, windowHeight){
@@ -381,7 +381,7 @@ $(document).ready(function() {
           var self = $(this);
           var div = selectWrap.find('div');
 
-          div.replaceWith(buildSelectedDiv(self.data('value'), self.html()))
+          div.replaceWith(buildSelectedDiv(self.data('value'), self.html()));
           setHiddenInputData(self);
           close();
           
@@ -481,7 +481,7 @@ $(document).ready(function() {
     
     $.fn.jq_smoothScrollSelect = function(options) {
       $(this).each(function(index, selectTag){        
-        new smoothScrollSelectMenu($(selectTag), options);
+        smoothScrollSelectMenu($(selectTag), options);
       });
     };
   })( jQuery );
