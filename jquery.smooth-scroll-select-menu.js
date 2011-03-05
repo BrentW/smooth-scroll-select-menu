@@ -206,6 +206,8 @@ $(document).ready(function() {
           $('html, body').scrollable().animate({scrollTop:menuOverflow()}, 1000);
         }
         
+        setLastLiBorderBottom();
+        
         afterOpenCallback(selectWrap);
       };
 
@@ -472,8 +474,20 @@ $(document).ready(function() {
         bindCloseEvents();
       };
 
+      var setLastLiBorderBottom = function(){
+        var borderElement = menu().find('li').first();
+        
+        if(parseInt(borderElement.css('border-left-width').replace('px', ''), 10) > 0){
+          var color = borderElement.css('border-left-color')
+          menu().find('li:visible').last().css('border-bottom', '1px solid ' + color);
+          
+        }
+
+      };
+
       var initialize = function(){
         replaceSelectWithNewMenu();
+        
         liCount = menu().find('li').length;
         bindEvents();
       };
