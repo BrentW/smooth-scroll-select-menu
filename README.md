@@ -36,7 +36,7 @@ Click to scroll example:
 			scrollEvent: 'click'
 		});
 
-Demos
+Demo
 -------
 [http://brentw.github.com/2011/03/06/smooth-scroll-select-menu-jquery-plugin.html
 ](http://brentw.github.com/2011/03/06/smooth-scroll-select-menu-jquery-plugin.html)
