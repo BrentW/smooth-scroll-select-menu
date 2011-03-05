@@ -204,7 +204,7 @@ $(document).ready(function() {
           $('html, body').scrollable().animate({scrollTop:menuOverflow()}, 1000);
         }
         
-        options.afterOpen();
+        options.afterOpen(selectWrap);
       };
 
       var close = function(){
