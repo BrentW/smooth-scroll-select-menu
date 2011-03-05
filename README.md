@@ -36,6 +36,10 @@ Click to scroll example:
 			scrollEvent: 'click'
 		});
 
+Demos
+-------
+[http://brentw.github.com/2011/03/06/smooth-scroll-select-menu-jquery-plugin.html
+](http://brentw.github.com/2011/03/06/smooth-scroll-select-menu-jquery-plugin.html)
 
 Requirements
 -------
@@ -44,7 +48,7 @@ Requirements
 * [Karl Swedberg jquery-smooth-scroll](https://github.com/kswedberg/jquery-smooth-scroll)
 * [jquery-mousewheel](http://plugins.jquery.com/project/mousewheel) (optional)
 
-Special Thanks
+Thank You
 -------
 
 * Karl Swedberg - provided the smooth scrolling functionality.
