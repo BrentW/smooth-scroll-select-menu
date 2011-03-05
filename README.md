@@ -37,11 +37,11 @@ Click to scroll example:
 Special Thanks
 -------
 
-*Karl Swedberg - provided the smooth scrolling functionality.
-https://github.com/graphis/jquery-smooth-scroll
+* Karl Swedberg - provided the smooth scrolling functionality.
+[https://github.com/graphis/jquery-smooth-scroll](https://github.com/graphis/jquery-smooth-scroll)
 
-*Kyle Haskins - set the crazy requirements for such a plugin to be created.
-http://www.kylehaskins.com/
+* Kyle Haskins - set the crazy requirements for such a plugin to be created.
+[http://www.kylehaskins.com](http://www.kylehaskins.com)
 
-*Brandon Dewitt - suggested this code be pluginized.
-http://twitter.com/abrandoned
+* Brandon Dewitt - suggested this code be pluginized.
+[http://twitter.com/abrandoned](http://www.kylehaskins.com)
