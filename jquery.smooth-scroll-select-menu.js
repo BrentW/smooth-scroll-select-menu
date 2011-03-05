@@ -1,9 +1,11 @@
 $(document).ready(function() {
   (function( $ ){
     function smoothScrollSelectMenu(selectTag, options) {
-      this.options      = options || {};      
-      var scrollTime    = options.scrollTime || 200;
-      var scrollEvent   = options.scrollEvent || 'hover';
+      var options               = options || {};      
+      var scrollTime            = options.scrollTime  || 200;
+      var scrollEvent           = options.scrollEvent || 'hover';
+      var afterOpenCallback     = options.afterOpen   || function(){};
+      var afterSelectCallback   = options.afterSelect || function(){};      
 
       var hoverToScroll = scrollEvent === 'hover';
       var clickToScroll = !hoverToScroll;
@@ -204,7 +206,7 @@ $(document).ready(function() {
           $('html, body').scrollable().animate({scrollTop:menuOverflow()}, 1000);
         }
         
-        options.afterOpen(selectWrap);
+        afterOpenCallback(selectWrap);
       };
 
       var close = function(){
@@ -385,7 +387,7 @@ $(document).ready(function() {
           setHiddenInputData(self);
           close();
           
-          options.afterSelect(self); //run afterSelect
+          afterSelectCallback(self); //run afterSelect
         });
       };
 
@@ -480,6 +482,8 @@ $(document).ready(function() {
     }
     
     $.fn.jq_smoothScrollSelect = function(options) {
+      var options      = options || {};      
+
       $(this).each(function(index, selectTag){        
         smoothScrollSelectMenu($(selectTag), options);
       });
