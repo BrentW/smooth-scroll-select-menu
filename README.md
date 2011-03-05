@@ -18,7 +18,7 @@ Usage
 
 Hover to scroll example:
 
-    $('select.classToChange').jq_smoothScrollSelect({
+    	$('select.classToChange').jq_smoothScrollSelect({
 			scrollTime: 200,
 			afterSelect: function(clicked_li){
 				alert('You selected ' + clicked_li.html() + '!');
